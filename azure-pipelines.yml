@@ -23,10 +23,10 @@ steps:
       sonarQubeRunAnalysis: false
       spotBugsAnalysis: false
   displayName: Build
-- task: Conexion@1
+- task: Conexión@1
   inputs:
     SonarCloud: 'SonarCloud'
-    organization: 'emoraga0993'
+    organization: 'DevOpsFundV4EMC'
     projectKey: 'devopsfundv4emc'
     projectName: 'microservicio-spring'
   displayName: 'SonarCloud Prepare'
