@@ -26,8 +26,8 @@ steps:
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'SonarCloud'
-    organization: 'mostwanted001'
-    projectKey: 'mostwanted001_microservicio-spring'
+    organization: 'emoraga0993'
+    projectKey: 'devopsfundv4emc'
     projectName: 'microservicio-spring'
   displayName: 'SonarCloud Prepare'
   
