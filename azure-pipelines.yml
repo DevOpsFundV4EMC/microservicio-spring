@@ -23,7 +23,7 @@ steps:
       sonarQubeRunAnalysis: false
       spotBugsAnalysis: false
   displayName: Build
-- task: Conexión@1
+- task: SonarCloud@1
   inputs:
     SonarCloud: 'SonarCloud'
     organization: 'DevOpsFundV4EMC'
