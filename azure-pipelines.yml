@@ -23,7 +23,7 @@ steps:
       sonarQubeRunAnalysis: false
       spotBugsAnalysis: false
   displayName: Build
-- task: SonarCloudPrepare@1
+- task: Conexion@1
   inputs:
     SonarCloud: 'SonarCloud'
     organization: 'emoraga0993'
