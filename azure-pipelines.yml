@@ -27,7 +27,7 @@ steps:
   inputs:
     SonarCloud: 'Conexion'
     organization: 'DevOpsFundV4EMC'
-    projectKey: 'devopsfundv4emc'
+    projectKey: 'devopsfundv4emc-microservicio-spring'
     projectName: 'microservicio-spring'
   displayName: 'SonarCloud Prepare'
   
