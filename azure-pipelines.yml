@@ -14,17 +14,28 @@ steps:
       git fetch --unshallow
   displayName: 'convert to non-shallow clone' 
 
+#- task: Gradle@3
+#  inputs:
+#      gradleWrapperFile: 'gradlew'
+#      tasks: 'build jacocoTestReport'
+#      publishJUnitResults: true
+#      testResultsFiles: '**/TEST-*.xml'
+#      javaHomeOption: 'JDKVersion'
+#      sonarQubeRunAnalysis: false
+#      spotBugsAnalysis: false
+#  displayName: Build
+
 - task: Gradle@3
   inputs:
       gradleWrapperFile: 'gradlew'
-      tasks: 'build jacocoTestReport'
-      publishJUnitResults: true
-      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'sonarqube'
+      publishJUnitResults: false
       javaHomeOption: 'JDKVersion'
-      sonarQubeRunAnalysis: false
+      sonarQubeRunAnalysis: true
+      sqGradlePluginVersionChoice: 'specify'
+      sonarQubeGradlePluginVersion: '3.5.0.2730'
       spotBugsAnalysis: false
   displayName: Build
-
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: 'JaCoCo'
