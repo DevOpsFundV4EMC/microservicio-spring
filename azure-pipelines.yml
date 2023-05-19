@@ -52,7 +52,7 @@ steps:
       sqGradlePluginVersionChoice: 'specify'
       sonarQubeGradlePluginVersion: '3.5.0.2730'
       spotBugsAnalysis: false
-  displayName: Build
+  displayName: Ejecucion Sonar
 
 - task: Docker@2
   inputs:
