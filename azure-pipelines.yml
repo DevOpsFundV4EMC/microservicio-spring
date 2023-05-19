@@ -23,14 +23,22 @@ steps:
       sonarQubeRunAnalysis: false
       spotBugsAnalysis: false
   displayName: Build
+#- task: SonarCloudPrepare@1
+#  inputs:
+#    SonarCloud: 'Conexion'
+#    organization: 'DevOpsFundV4EMC'
+#    projectKey: 'devopsfundv4emc-microservicio-spring'
+#    projectName: 'microservicio-spring'
+#  displayName: 'SonarCloud Prepare'
+
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'Conexion'
-    organization: 'DevOpsFundV4EMC'
+    organization: 'devopsfundv4emc-microservicio-spring'
+    scannerMode: 'MSBuild'
     projectKey: 'devopsfundv4emc-microservicio-spring'
     projectName: 'microservicio-spring'
   displayName: 'SonarCloud Prepare'
-  
 - task: Gradle@3
   displayName: 'Run test'
   inputs:
