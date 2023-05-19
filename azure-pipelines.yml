@@ -65,12 +65,12 @@ steps:
 - task: Docker@2
   inputs:
       containerRegistry: 'Docker'
-      repository: 'DevOpsFundV4EMC.microservicio-spring'
+      repository: 'emoraaga/microservicio-spring'
       command: 'build'
       Dockerfile: '**/Dockerfile'
   
 - task: Docker@2
   inputs:
       containerRegistry: 'Docker'
-      repository: 'DevOpsFundV4EMC.microservicio-spring'
+      repository: 'emoraaga/microservicio-spring'
       command: 'push'
