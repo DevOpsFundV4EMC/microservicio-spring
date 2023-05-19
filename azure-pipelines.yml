@@ -33,14 +33,10 @@ steps:
     pathToSources: '$(System.DefaultWorkingDirectory)/src/main/java/'
     reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test'
     failIfCoverageEmpty: true
-
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'Conexion'
     organization: 'devopsfundv4emc-microservicio-spring'
-    scannerMode: 'MSBuild'
-    projectKey: 'devopsfundv4emc-microservicio-spring'
-    projectName: 'microservicio-spring'
   displayName: 'SonarCloud Prepare'
 - task: Gradle@3
   inputs:
