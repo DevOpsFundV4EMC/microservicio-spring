@@ -23,13 +23,14 @@ steps:
       sonarQubeRunAnalysis: false
       spotBugsAnalysis: false
   displayName: Build
-#- task: SonarCloudPrepare@1
-#  inputs:
-#    SonarCloud: 'Conexion'
-#    organization: 'DevOpsFundV4EMC'
-#    projectKey: 'devopsfundv4emc-microservicio-spring'
-#    projectName: 'microservicio-spring'
-#  displayName: 'SonarCloud Prepare'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'JaCoCo'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test/jacocoTestReport.xml'
+    pathToSources: '$(System.DefaultWorkingDirectory)/src/main/java/'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test'
+    failIfCoverageEmpty: true
 
 - task: SonarCloudPrepare@1
   inputs:
