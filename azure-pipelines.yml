@@ -36,7 +36,9 @@ steps:
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'Conexion'
-    organization: 'devopsfundv4emc-microservicio-spring'
+    organization: 'DevOpsFundV4EMC'
+    projectName: 'microservicio-spring'
+    projectKey: 'DevOpsFundV4EMC_microservicio-spring'
   displayName: 'SonarCloud Prepare'
 - task: Gradle@3
   inputs:
