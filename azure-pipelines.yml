@@ -74,3 +74,16 @@ steps:
       containerRegistry: 'Docker'
       repository: 'enriquemoraaga/microservicio-spring'
       command: 'push'
+
+- job: 
+  pool: 'Default'
+  steps:
+  - task: Kubernetes@1
+    inputs:
+      connectionType: 'None'
+      command: 'apply'
+      arguments: '-f deployment-app.yaml'
+  
+  - script: kubectl port-forward deploy/microservicio-deployment 8086:8085
+
+#  - script: jmeter -n -t $(System.DefaultWorkingDirectory)/jmeter/test-plan.jmx -l $(System.DefaultWorkingDirectory)/resultados.jtl
