@@ -15,7 +15,7 @@ public class GreetingController {
 
 	@RequestMapping("/greeting")
 	public @ResponseBody String greeting() {
-		return service.greet("Finaliza el curso DevOps Foundation V4 - Enrique Moraga (alumno)");
+		return service.greet();
 	}
 
 }
