@@ -20,6 +20,7 @@ jobs:
       inputs:
         gradleWrapperFile: 'gradlew'
         tasks: 'build jacocoTestReport'
+#       tasks: 'build jacocoTestReport jacocoTestCoverageVerification'
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
         javaHomeOption: 'JDKVersion'
@@ -34,6 +35,8 @@ jobs:
         pathToSources: '$(System.DefaultWorkingDirectory)/src/main/java/'
         reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test'
         failIfCoverageEmpty: true
+      displayName: 'JaCoCo Pruebas Unitarias'
+
     - task: SonarCloudPrepare@1
       inputs:
         SonarCloud: 'Conexion'
@@ -57,6 +60,7 @@ jobs:
       inputs:
         containerRegistry: 'Docker'
         command: 'login'
+      displayName: Login Docker
     
     - task: Docker@2
       inputs:
@@ -67,7 +71,8 @@ jobs:
         tags: |
                 $(Build.BuildId)
                 latest
-    
+      displayName: Build Ambiente
+
     - task: Docker@2
       inputs:
         containerRegistry: 'Docker'
@@ -76,6 +81,7 @@ jobs:
         tags: |
               $(Build.BuildId)
               latest
+      displayName: Build Imagen Docker
 
 - job: job2
   dependsOn: job1
@@ -86,7 +92,7 @@ jobs:
         connectionType: 'None'
         command: 'apply'
         arguments: '--force -f deployment-app.yaml'
-    displayName: 'kubectl port-forward'
+    displayName: 'kubectl Connect'
 
   - task: PowerShell@2
     inputs:
