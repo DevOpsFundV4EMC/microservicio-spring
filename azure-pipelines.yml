@@ -80,6 +80,12 @@ steps:
       command: 'apply'
       arguments: '-f deployment-app.yaml'
 
-  - script: kubectl port-forward deploy/microservicio-deployment 8086:8085
-
+#  - script: kubectl port-forward deploy/microservicio-deployment 8086:8085
+  - task: PowerShell@2
+    inputs:
+     targetType: 'inline'
+     script: |
+         Start-Process "kubectl" -ArgumentList "port-forward service/lab-service 8080:8080" -WindowStyle Hidden
+    displayName: 'kubectl port-forward'
+    continueOnError: true
 #  - script: jmeter -n -t $(System.DefaultWorkingDirectory)/jmeter/test-plan.jmx -l $(System.DefaultWorkingDirectory)/resultados.jtl
