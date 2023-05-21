@@ -8,10 +8,10 @@ trigger:
 
 #jobs:
 #- job:
-  pool:
-    vmImage: ubuntu-latest
+pool:
+  vmImage: ubuntu-latest
 
-  steps:
+steps:
   - script: |
       git fetch --unshallow
     displayName: 'convert to non-shallow clone' 
