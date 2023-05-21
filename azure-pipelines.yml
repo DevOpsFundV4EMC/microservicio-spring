@@ -6,86 +6,93 @@
 trigger:
 - feature-ms-EnriqueMoraga-mensaje
 
-#jobs:
-#- job:
-pool:
-  vmImage: ubuntu-latest
+jobs:
+- job: job1
+  pool:
+    vmImage: ubuntu-latest
 
-steps:
-  - script: |
-      git fetch --unshallow
-    displayName: 'convert to non-shallow clone' 
+  steps:
+    - script: |
+        git fetch --unshallow
+      displayName: 'convert to non-shallow clone' 
 
-  - task: Gradle@3
-    inputs:
-      gradleWrapperFile: 'gradlew'
-      tasks: 'build jacocoTestReport'
-      publishJUnitResults: true
-      testResultsFiles: '**/TEST-*.xml'
-      javaHomeOption: 'JDKVersion'
-      sonarQubeRunAnalysis: false
-      spotBugsAnalysis: false
-    displayName: Build
+    - task: Gradle@3
+      inputs:
+        gradleWrapperFile: 'gradlew'
+        tasks: 'build jacocoTestReport'
+        publishJUnitResults: true
+        testResultsFiles: '**/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        sonarQubeRunAnalysis: false
+        spotBugsAnalysis: false
+      displayName: Build
 
-  - task: PublishCodeCoverageResults@1
-    inputs:
-      codeCoverageTool: 'JaCoCo'
-      summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test/jacocoTestReport.xml'
-      pathToSources: '$(System.DefaultWorkingDirectory)/src/main/java/'
-      reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test'
-      failIfCoverageEmpty: true
-  - task: SonarCloudPrepare@1
-    inputs:
-       SonarCloud: 'Conexion'
-       organization: 'devopsfundv4emc-microservicio-spring'
-       projectName: 'microservicio-spring'
-       projectKey: 'DevOpsFundV4EMC_microservicio-spring'
-    displayName: 'SonarCloud Prepare'
-  - task: Gradle@3
-    inputs:
-       gradleWrapperFile: 'gradlew'
-       tasks: 'sonarqube'
-       publishJUnitResults: false
-       javaHomeOption: 'JDKVersion'
-       sonarQubeRunAnalysis: true
-       sqGradlePluginVersionChoice: 'specify'
-       sonarQubeGradlePluginVersion: '3.5.0.2730'
-       spotBugsAnalysis: false
-    displayName: Ejecucion Sonar
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: 'JaCoCo'
+        summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test/jacocoTestReport.xml'
+        pathToSources: '$(System.DefaultWorkingDirectory)/src/main/java/'
+        reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/test'
+        failIfCoverageEmpty: true
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'Conexion'
+        organization: 'devopsfundv4emc-microservicio-spring'
+        projectName: 'microservicio-spring'
+        projectKey: 'DevOpsFundV4EMC_microservicio-spring'
+      displayName: 'SonarCloud Prepare'
+    - task: Gradle@3
+      inputs:
+        gradleWrapperFile: 'gradlew'
+        tasks: 'sonarqube'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        sonarQubeRunAnalysis: true
+        sqGradlePluginVersionChoice: 'specify'
+        sonarQubeGradlePluginVersion: '3.5.0.2730'
+        spotBugsAnalysis: false
+      displayName: Ejecucion Sonar
 
-  - task: Docker@2
-    inputs:
-       containerRegistry: 'Docker'
-       command: 'login'
-  
-  - task: Docker@2
-    inputs:
-       containerRegistry: 'Docker'
-       repository: 'enriquemoraaga/microservicio-spring'
-       command: 'build'
-       Dockerfile: '**/Dockerfile'
-  
-  - task: Docker@2
-    inputs:
-       containerRegistry: 'Docker'
-       repository: 'enriquemoraaga/microservicio-spring'
-       command: 'push'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Docker'
+        command: 'login'
+    
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Docker'
+        repository: 'enriquemoraaga/microservicio-spring'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: |
+                $(Build.BuildId)
+                latest
+    
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Docker'
+        repository: 'enriquemoraaga/microservicio-spring'
+        command: 'push'
+        tags: |
+              $(Build.BuildId)
+              latest
 
-#- job: 
-#  pool: 'Default'
-#  steps:
- # - task: Kubernetes@1
- #   inputs:
- #     connectionType: 'None'
- #     command: 'apply'
- #     arguments: '-f deployment-app.yaml'
-
-  - script: kubectl port-forward enriquemoraaga/microservicio-spring:80 8080:8080
- # - task: PowerShell@2
- #   inputs:
- #    targetType: 'inline'
- #    script: |
- #        Start-Process "kubectl" -ArgumentList "port-forward enriquemoraaga/microservicio-spring 8080 8080" -WindowStyle Hidden
+- job: job2
+  dependsOn: job1
+  pool: 'Default'
+  steps:
+  - task: Kubernetes@1
+    inputs:
+        connectionType: 'None'
+        command: 'apply'
+        arguments: '--force -f deployment-app.yaml'
     displayName: 'kubectl port-forward'
- #   continueOnError: true
+
+  - task: PowerShell@2
+    inputs:
+        targetType: 'inline'
+        script: |
+          Start-Process "kubectl" -ArgumentList "port-forward service/lab-service 8080:8080" -WindowStyle Hidden
+    displayName: 'kubectl port-forward'
+    continueOnError: true
 #  - script: jmeter -n -t $(System.DefaultWorkingDirectory)/jmeter/test-plan.jmx -l $(System.DefaultWorkingDirectory)/resultados.jtl
