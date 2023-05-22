@@ -19,8 +19,8 @@ jobs:
     - task: Gradle@3
       inputs:
         gradleWrapperFile: 'gradlew'
-        tasks: 'build jacocoTestReport'
-#       tasks: 'build jacocoTestReport jacocoTestCoverageVerification'
+ #       tasks: 'build jacocoTestReport'
+        tasks: 'build jacocoTestReport jacocoTestCoverageVerification'
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
         javaHomeOption: 'JDKVersion'
@@ -43,6 +43,14 @@ jobs:
         organization: 'devopsfundv4emc-microservicio-spring'
         projectName: 'microservicio-spring'
         projectKey: 'DevOpsFundV4EMC_microservicio-spring'
+        extraProperties: |
+          sonar.pullrequest.provider=none
+          sonar.scm.disabled=true
+          sonar.coverage.jacoco.xmlReportPaths=$(System.DefaultWorkingDirectory)/build/jacocoHtml/test/jacocoTestReport.xml
+          sonar.coverage.jacoco.minimumProjectThreshol="$(min_coverage)"  
+          sonar.qualitygate.wait=true
+          sonar.qualitygate.conditions=blocker
+          sonar.issue.squid:MaximumInheritanceDepth.severity=BLOCKER
       displayName: 'SonarCloud Prepare'
     - task: Gradle@3
       inputs:
