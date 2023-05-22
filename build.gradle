@@ -30,6 +30,7 @@ jacocoTestReport {
 test {
 	useJUnitPlatform()
 }
+
 jacocoTestCoverageVerification {
 	violationRules {
 		rule {
